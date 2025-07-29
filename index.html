@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>失眠嚴重度量表 (ISI) - 蛹之生心理健康集團</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 40px;
+        }
+        
+        .question {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #4a90e2;
+        }
+        
+        .question h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        
+        .sub-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .sub-question h4 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 16px;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+        }
+        
+        .option {
+            position: relative;
+        }
+        
+        .option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .option label {
+            display: block;
+            padding: 8px 4px;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            color: #495057;
+            line-height: 1.2;
+            min-height: 45px;
+        }
+        
+        .option input[type="radio"]:checked + label {
+            background: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+        
+        .option label:hover {
+            border-color: #4a90e2;
+            transform: translateY(-1px);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+            min-width: 200px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #4a90e2;
+            margin-bottom: 15px;
+        }
+        
+        .level {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+        
+        .recommendation {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .recommendation h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .recommendation p {
+            color: #856404;
+            line-height: 1.5;
+        }
+        
+        .contact-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .contact-info h4 {
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
+        
+        .contact-info p {
+            color: #0056b3;
+            line-height: 1.5;
+        }
+        
+        .reset-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            background: #5a6268;
+        }
+        
+        /* 小型裝置 (手機) */
+        @media (max-width: 576px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .header p {
+                font-size: 14px;
+            }
+            
+            .form-container {
+                padding: 15px;
+            }
+            
+            .question {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .question h3 {
+                font-size: 16px;
+            }
+            
+            .sub-question {
+                padding: 10px;
+            }
+            
+            .sub-question h4 {
+                font-size: 14px;
+            }
+            
+            .options {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            
+            /* 基本資料區塊的特殊處理 */
+            .question:first-of-type .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .option label {
+                padding: 6px 2px;
+                font-size: 11px;
+                min-height: 40px;
+            }
+            
+            .submit-btn {
+                font-size: 16px;
+                padding: 12px 30px;
+                min-width: 180px;
+            }
+            
+            .score {
+                font-size: 32px;
+            }
+            
+            .level {
+                font-size: 18px;
+            }
+            
+            .description {
+                font-size: 14px;
+            }
+            
+            .recommendation, .contact-info {
+                padding: 15px;
+            }
+        }
+        
+        /* 中型裝置 (平板) */
+        @media (min-width: 577px) and (max-width: 768px) {
+            .form-container {
+                padding: 25px;
+            }
+            
+            .options {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            
+            .option label {
+                padding: 10px 6px;
+                font-size: 12px;
+                min-height: 50px;
+            }
+            
+            .header h1 {
+                font-size: 26px;
+            }
+            
+            .score {
+                font-size: 42px;
+            }
+            
+            .level {
+                font-size: 22px;
+            }
+        }
+        
+        /* 大型裝置 (桌面) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .options {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 10px;
+            }
+            
+            .option label {
+                padding: 10px 6px;
+                font-size: 13px;
+                min-height: 50px;
+            }
+        }
+        
+        /* 超大型裝置 */
+        @media (min-width: 1025px) {
+            .container {
+                max-width: 900px;
+            }
+            
+            .options {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 12px;
+            }
+            
+            .option label {
+                padding: 12px 8px;
+                font-size: 13px;
+                min-height: 55px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>失眠嚴重度量表</h1>
+            <p>Insomnia Severity Index (ISI)</p>
+            <p style="margin-top: 10px; font-size: 14px;">蛹之生心理健康集團</p>
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 14px;">
+                <p>🔒 <strong>匿名填答保證</strong></p>
+                <p style="margin-top: 5px;">此問卷採完全匿名方式，不會收集任何個人識別資訊。<br>
+                所有數據僅供大數據分析使用，請安心填答。</p>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <form id="isiForm">
+                <!-- 基本資料區塊 -->
+                <div class="question">
+                    <h3>📋 基本資料</h3>
+                    
+                    <div class="sub-question">
+                        <h4>年齡</h4>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="age" value="18-25" id="age_1">
+                                <label for="age_1">18-25歲</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="age" value="26-35" id="age_2">
+                                <label for="age_2">26-35歲</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="age" value="36-45" id="age_3">
+                                <label for="age_3">36-45歲</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="age" value="46-55" id="age_4">
+                                <label for="age_4">46-55歲</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="age" value="56+" id="age_5">
+                                <label for="age_5">56歲以上</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-question">
+                        <h4>性別</h4>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="gender" value="male" id="gender_1">
+                                <label for="gender_1">男性</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="gender" value="female" id="gender_2">
+                                <label for="gender_2">女性</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="gender" value="other" id="gender_3">
+                                <label for="gender_3">其他</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="gender" value="prefer_not_to_say" id="gender_4">
+                                <label for="gender_4">不便透露</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-question">
+                        <h4>工作年資</h4>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="experience" value="0-1" id="exp_1">
+                                <label for="exp_1">1年以下</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="experience" value="1-3" id="exp_2">
+                                <label for="exp_2">1-3年</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="experience" value="3-5" id="exp_3">
+                                <label for="exp_3">3-5年</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="experience" value="5-10" id="exp_4">
+                                <label for="exp_4">5-10年</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="experience" value="10+" id="exp_5">
+                                <label for="exp_5">10年以上</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <h3>🌙 1. 評估這兩週內失眠問題的嚴重程度</h3>
+                    
+                    <div class="sub-question">
+                        <h4>a. 入睡困難</h4>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q1a" value="0" id="q1a_0">
+                                <label for="q1a_0">無<br>(0)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1a" value="1" id="q1a_1">
+                                <label for="q1a_1">輕度<br>(1)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1a" value="2" id="q1a_2">
+                                <label for="q1a_2">中度<br>(2)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1a" value="3" id="q1a_3">
+                                <label for="q1a_3">重度<br>(3)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1a" value="4" id="q1a_4">
+                                <label for="q1a_4">非常嚴重<br>(4)</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-question">
+                        <h4>b. 無法維持較長的睡眠</h4>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q1b" value="0" id="q1b_0">
+                                <label for="q1b_0">無<br>(0)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1b" value="1" id="q1b_1">
+                                <label for="q1b_1">輕度<br>(1)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1b" value="2" id="q1b_2">
+                                <label for="q1b_2">中度<br>(2)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1b" value="3" id="q1b_3">
+                                <label for="q1b_3">重度<br>(3)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1b" value="4" id="q1b_4">
+                                <label for="q1b_4">非常嚴重<br>(4)</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sub-question">
+                        <h4>c. 太早醒</h4>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q1c" value="0" id="q1c_0">
+                                <label for="q1c_0">無<br>(0)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1c" value="1" id="q1c_1">
+                                <label for="q1c_1">輕度<br>(1)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1c" value="2" id="q1c_2">
+                                <label for="q1c_2">中度<br>(2)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1c" value="3" id="q1c_3">
+                                <label for="q1c_3">重度<br>(3)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1c" value="4" id="q1c_4">
+                                <label for="q1c_4">非常嚴重<br>(4)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <h3>🌙 2. 您滿意自己最近的睡眠狀態嗎？</h3>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q2" value="0" id="q2_0">
+                            <label for="q2_0">非常滿意<br>(0)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="1" id="q2_1">
+                            <label for="q2_1">滿意<br>(1)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="2" id="q2_2">
+                            <label for="q2_2">中等<br>(2)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="3" id="q2_3">
+                            <label for="q2_3">不滿意<br>(3)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="4" id="q2_4">
+                            <label for="q2_4">非常不滿意<br>(4)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <h3>🌙 3. 睡眠問題是否有干擾到您的日常生活功能？</h3>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q3" value="0" id="q3_0">
+                            <label for="q3_0">完全無干擾<br>(0)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="1" id="q3_1">
+                            <label for="q3_1">一點<br>(1)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="2" id="q3_2">
+                            <label for="q3_2">稍微<br>(2)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="3" id="q3_3">
+                            <label for="q3_3">很多<br>(3)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="4" id="q3_4">
+                            <label for="q3_4">非常多<br>(4)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <h3>🌙 4. 他人是否有注意到您的生活品質因睡眠問題受到影響？</h3>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q4" value="0" id="q4_0">
+                            <label for="q4_0">完全沒注意<br>(0)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="1" id="q4_1">
+                            <label for="q4_1">一點<br>(1)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="2" id="q4_2">
+                            <label for="q4_2">稍微<br>(2)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="3" id="q4_3">
+                            <label for="q4_3">很多<br>(3)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="4" id="q4_4">
+                            <label for="q4_4">非常注意<br>(4)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <h3>🌙 5. 最近的睡眠問題是否令您擔心/困擾？</h3>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q5" value="0" id="q5_0">
+                            <label for="q5_0">完全沒注意<br>(0)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="1" id="q5_1">
+                            <label for="q5_1">一點<br>(1)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="2" id="q5_2">
+                            <label for="q5_2">稍微<br>(2)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="3" id="q5_3">
+                            <label for="q5_3">很多<br>(3)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="4" id="q5_4">
+                            <label for="q5_4">非常擔心<br>(4)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">計算結果</button>
+            </form>
+            
+            <div class="result" id="result">
+                <div class="score" id="scoreDisplay"></div>
+                <div class="level" id="levelDisplay"></div>
+                <div class="description" id="descriptionDisplay"></div>
+                <div class="recommendation" id="recommendationDisplay"></div>
+                <div class="contact-info">
+                    <h4>🏥 蛹之生心理健康集團</h4>
+                    <p>如需專業協助，歡迎聯繫我們的據點：</p>
+                    <p>台北明德館 | 台北南港館 | 新北板橋館 | 新北中和館<br>
+                    新竹光復館 | 台中五權館 | 台中文心館 | 高雄楠梓館</p>
+                </div>
+                <button type="button" class="reset-btn" onclick="resetForm()">重新測驗</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('isiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateResult();
+        });
+
+        function calculateResult() {
+            const formData = new FormData(document.getElementById('isiForm'));
+            
+            // 檢查是否所有題目都已回答
+            const requiredQuestions = ['age', 'gender', 'experience', 'q1a', 'q1b', 'q1c', 'q2', 'q3', 'q4', 'q5'];
+            for (let question of requiredQuestions) {
+                if (!formData.get(question)) {
+                    alert('請完成所有題目後再提交');
+                    return;
+                }
+            }
+            
+            // 計算總分
+            let totalScore = 0;
+            totalScore += parseInt(formData.get('q1a'));
+            totalScore += parseInt(formData.get('q1b'));
+            totalScore += parseInt(formData.get('q1c'));
+            totalScore += parseInt(formData.get('q2'));
+            totalScore += parseInt(formData.get('q3'));
+            totalScore += parseInt(formData.get('q4'));
+            totalScore += parseInt(formData.get('q5'));
+            
+            // 顯示結果
+            displayResult(totalScore);
+            
+            // 收集數據（可選）
+            collectData({
+                score: totalScore,
+                demographics: {
+                    age: formData.get('age'),
+                    gender: formData.get('gender'),
+                    experience: formData.get('experience')
+                },
+                answers: {
+                    q1a: formData.get('q1a'),
+                    q1b: formData.get('q1b'),
+                    q1c: formData.get('q1c'),
+                    q2: formData.get('q2'),
+                    q3: formData.get('q3'),
+                    q4: formData.get('q4'),
+                    q5: formData.get('q5')
+                },
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        function displayResult(score) {
+            let level, description, recommendation;
+            let levelColor = '#4a90e2';
+            
+            if (score <= 7) {
+                level = '無明顯失眠困擾';
+                description = '您的睡眠狀況良好，沒有明顯的失眠問題。';
+                recommendation = '建議維持良好的睡眠習慣，保持規律的作息時間。';
+                levelColor = '#28a745';
+            } else if (score <= 14) {
+                level = '稍有睡眠困擾';
+                description = '您有輕微的睡眠困擾，但還不算嚴重。';
+                recommendation = '建議改善睡眠環境，避免睡前使用電子產品，建立良好的睡前儀式。';
+                levelColor = '#ffc107';
+            } else if (score <= 21) {
+                level = '有明顯失眠困擾';
+                description = '您有明顯的失眠問題，已影響到日常生活。';
+                recommendation = '建議尋求專業醫療協助，進行進一步的評估和治療。蛹之生心理健康集團可以為您提供專業的協助。';
+                levelColor = '#fd7e14';
+            } else {
+                level = '有嚴重失眠困擾';
+                description = '您有嚴重的失眠問題，嚴重影響生活品質。';
+                recommendation = '強烈建議立即尋求專業醫療協助。蛹之生心理健康集團的專業團隊可以為您提供完整的治療方案。';
+                levelColor = '#dc3545';
+            }
+            
+            document.getElementById('scoreDisplay').textContent = score + ' 分';
+            document.getElementById('levelDisplay').textContent = level;
+            document.getElementById('levelDisplay').style.color = levelColor;
+            document.getElementById('descriptionDisplay').textContent = description;
+            document.getElementById('recommendationDisplay').innerHTML = 
+                '<h4>💡 建議</h4><p>' + recommendation + '</p>';
+            
+            // 隱藏表單，顯示結果
+            document.getElementById('isiForm').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            
+            // 滾動到結果區域
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('isiForm').reset();
+            document.getElementById('isiForm').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function collectData(data) {
+            // 發送數據到 Google Sheets
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/a/macros/morph.tw/s/AKfycbzx_ZSETv39c5XVog1Fv7nBAS_qbwJ7Gup98sOOS97JmdSJIEveDE-G8u32REHWOPmF/exec';
+            
+            try {
+                // 同時保存到本地和 Google Sheets
+                let existingData = JSON.parse(localStorage.getItem('isiResults') || '[]');
+                existingData.push(data);
+                localStorage.setItem('isiResults', JSON.stringify(existingData));
+                
+                // 發送到 Google Sheets
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                    mode: 'no-cors'
+                })
+                .then(() => {
+                    console.log('數據已成功發送到 Google Sheets');
+                })
+                .catch(error => {
+                    console.error('網路錯誤:', error);
+                    // 即使發送失敗，本地數據已保存
+                });
+                
+                console.log('數據已保存:', data);
+            } catch (error) {
+                console.log('數據保存失敗:', error);
+            }
+        }
+        
+        // 可選：查看收集的數據
+        function viewCollectedData() {
+            try {
+                const data = JSON.parse(localStorage.getItem('isiResults') || '[]');
+                console.log('收集的數據:', data);
+                return data;
+            } catch (error) {
+                console.log('讀取數據失敗:', error);
+                return [];
+            }
+        }
+    </script>
+</body>
+</html>
